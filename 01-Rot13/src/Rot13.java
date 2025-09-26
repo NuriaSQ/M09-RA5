@@ -4,8 +4,8 @@ public class Rot13 {
     public static char[] guardarAbecedariMajuscula = "AÀÁÄBCÇDEÈÉËFGHIÌÍÏJKLMNÑOÒÓÖPQRSTUÙÚÜVWXYZ".toCharArray();
 
     public static void main(String[] args) {
-        String cadenaXifrada = "Hola, què tal? Sóc la Núria.";
-        String cadenaDesxifrada = "Óvug, abm ägu? Áxï ug Úçàög.";
+        String cadenaXifrada = "Hola, què tal?";
+        String cadenaDesxifrada = "Óvug, abm ägu?";
 
         String resultatCadenaXifrada = xifraRot13(cadenaXifrada);
         String resultatCadenaDesxifrada = desxifraRot13(cadenaDesxifrada);
