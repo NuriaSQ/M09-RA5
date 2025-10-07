@@ -8,15 +8,16 @@ public class Monoalfabetic {
     public static final char[] ABECEDARI_PERMUTAT = permutaAlfabet(ABECEDARI_MAJUSCULA);
 
     public static void main(String[] args) {
+        System.out.println("ABECEDARI NORMAL:");
         for (int i = 0; i < ABECEDARI_MAJUSCULA.length; i++) {
             System.out.print(ABECEDARI_MAJUSCULA[i] + " ");
         }
-        System.out.println();
+        System.out.println("\nABECEDARI PERMUTAT:");
         for (int i = 0; i < ABECEDARI_PERMUTAT.length; i++) {
             System.out.print(ABECEDARI_PERMUTAT[i] + " ");
         }
         System.out.println();
-        String cadenaDesxifrada = "HOLA";
+        String cadenaDesxifrada = "Hola! Què tal :)";
         String cadenaXifrada = xifraMonoAlfa(cadenaDesxifrada);
 
         System.out.println(cadenaDesxifrada);
@@ -46,11 +47,16 @@ public class Monoalfabetic {
         StringBuilder xifratString = new StringBuilder();
         for (int i = 0; i < cadena.length(); i++) {
             char lletra = cadena.charAt(i);
-            for (int j = 0; j < ABECEDARI_MAJUSCULA.length; j++) {
-                if(lletra == ABECEDARI_MAJUSCULA[j]){
-                    xifratString.append(ABECEDARI_PERMUTAT[j]);      
-                } 
-            }
+            if (Character.isLowerCase(lletra)) {
+                lletra = Character.toUpperCase(lletra);
+                for (int j = 0; j < ABECEDARI_MAJUSCULA.length; j++) {
+                    if(lletra == ABECEDARI_MAJUSCULA[j]) xifratString.append(Character.toLowerCase(ABECEDARI_PERMUTAT[j]));      
+                }
+            } else if (Character.isUpperCase(lletra)) {
+                for (int j = 0; j < ABECEDARI_MAJUSCULA.length; j++) {
+                    if(lletra == ABECEDARI_MAJUSCULA[j]) xifratString.append(ABECEDARI_PERMUTAT[j]);      
+                }
+            } else xifratString.append(lletra);
         }
         String xifratMonoAlfa = xifratString.toString();
         return xifratMonoAlfa;
@@ -60,11 +66,16 @@ public class Monoalfabetic {
         StringBuilder desxifratString = new StringBuilder();
         for (int i = 0; i < cadena.length(); i++) {
             char lletra = cadena.charAt(i);
-            for (int j = 0; j < ABECEDARI_PERMUTAT.length; j++) {
-                if(lletra == ABECEDARI_PERMUTAT[j]){
-                    desxifratString.append(ABECEDARI_MAJUSCULA[j]);      
-                } 
-            }
+            if (Character.isLowerCase(lletra)) {
+                lletra = Character.toUpperCase(lletra);
+                for (int j = 0; j < ABECEDARI_PERMUTAT.length; j++) {
+                    if(lletra == ABECEDARI_PERMUTAT[j]) desxifratString.append(Character.toLowerCase(ABECEDARI_MAJUSCULA[j]));      
+                }
+            } else if (Character.isUpperCase(lletra)) {
+                for (int j = 0; j < ABECEDARI_PERMUTAT.length; j++) {
+                    if(lletra == ABECEDARI_PERMUTAT[j]) desxifratString.append(ABECEDARI_MAJUSCULA[j]);      
+                }
+            } else desxifratString.append(lletra);
         }
         String desxifratMonoAlfa = desxifratString.toString();
         return desxifratMonoAlfa;
