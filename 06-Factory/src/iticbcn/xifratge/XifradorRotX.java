@@ -1,36 +1,45 @@
-public class RotX {
+package iticbcn.xifratge;
+
+public class XifradorRotX implements Xifrador {
 
     public static final char[] ABECEDARI_MINUSCULA = "aàáäbcçdeèéëfghiìíïjklmnñoòóöpqrstuùúüvwxyz".toCharArray();
     public static final char[] ABECEDARI_MAJUSCULA = "AÀÁÄBCÇDEÈÉËFGHIÌÍÏJKLMNÑOÒÓÖPQRSTUÙÚÜVWXYZ".toCharArray();
     public static final int ABECEDARI = 43;
-    public static void main(String[] args) {
-        String cadenaDesxifrada = "Visca Mass Effect!";
-        String cadenaDesxifrada2 = "XYZ";
-        String cadenaXifrada = "Ámwfd Pdww Ijjifx!";
-        String cadenaXifrada2 = "ZAÀ";
-        int desplacament = 7;
-        int desplacament2 = 2;
 
-        String resultatCadenaXifrada = xifraRotX(cadenaDesxifrada, desplacament);
-        String resultatCadenaDesxifrada = desxifraRotX(cadenaXifrada, desplacament);
-        String resultatCadenaXifrada2 = xifraRotX(cadenaDesxifrada2, desplacament2);
-        String resultatCadenaDesxifrada2 = desxifraRotX(cadenaXifrada2, desplacament2);
-        String[] missatges = forcaBrutaRotX(cadenaXifrada);
-
-        System.out.println("Xifrat");
-        System.out.println("(" + desplacament + ")" + cadenaDesxifrada + " => " + resultatCadenaXifrada);
-        System.out.println("(" + desplacament2 + ")" + cadenaDesxifrada2 + " => " + resultatCadenaXifrada2);
-        System.out.println("\nDesxifrat");
-        System.out.println("(" + desplacament + ")" + cadenaXifrada + " => " + resultatCadenaDesxifrada);
-        System.out.println("(" + desplacament2 + ")" + cadenaXifrada2 + " => " + resultatCadenaDesxifrada2);
-        System.out.println("\nMissatge xifrat: " + cadenaXifrada);
-        System.out.println("===================================");
-        for (int i = 0; i < missatges.length; i++) {
-            System.out.println("(" + i + ")" + missatges[i]);
+    @Override
+    public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
+        int desplacament;
+        try {
+            desplacament = Integer.parseInt(clau);
+        } catch (NumberFormatException e) {
+            throw new ClauNoSuportada("Clau de RotX ha de ser un sencer de 0 a 40");
         }
+        
+        if (desplacament < 1 || desplacament > ABECEDARI) {
+            throw new ClauNoSuportada("Clau de RotX ha de ser un sencer de 0 a 40");
+        }
+
+        String xifrat = xifraRotX(msg, desplacament);
+        return new TextXifrat(xifrat.getBytes());
     }
 
-    private static String xifraRotX(String cadena, int desplacament ){
+    @Override
+    public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
+        int desplacament;
+        try {
+            desplacament = Integer.parseInt(clau);
+        } catch (NumberFormatException e) {
+            throw new ClauNoSuportada("Clau de RotX ha de ser un sencer de 0 a 40");
+        }
+
+        if (desplacament < 1 || desplacament > ABECEDARI) {
+            throw new ClauNoSuportada("Clau de RotX ha de ser un sencer de 0 a 40");
+        }
+
+        return desxifraRotX(new String(xifrat.getBytes()), desplacament);
+    }
+
+    private String xifraRotX(String cadena, int desplacament ){
         StringBuilder xifrarString = new StringBuilder();
         for (int i = 0; i < cadena.length(); i++) {
             char lletra = cadena.charAt(i);
@@ -50,11 +59,10 @@ public class RotX {
                 }
             } else xifrarString.append(lletra);
         } 
-        String xifraRotX = xifrarString.toString();
-        return xifraRotX;
+        return xifrarString.toString();
     }
 
-    private static String desxifraRotX(String cadena, int desplacament){
+    private String desxifraRotX(String cadena, int desplacament){
         StringBuilder desxifrarString = new StringBuilder();
         for (int i = 0; i < cadena.length(); i++) {
             char lletra = cadena.charAt(i);
@@ -74,15 +82,6 @@ public class RotX {
                 }
             } else desxifrarString.append(lletra);
         } 
-        String desxifraRotX = desxifrarString.toString();
-        return desxifraRotX;
-    }
-
-    private static String[] forcaBrutaRotX(String cadenaXifrada){
-        String[] missatges = new String[ABECEDARI];
-        for (int i = 0; i < ABECEDARI; i++) {
-            missatges[i] = desxifraRotX(cadenaXifrada, i);
-        }
-        return missatges;
+        return desxifrarString.toString();
     }
 }

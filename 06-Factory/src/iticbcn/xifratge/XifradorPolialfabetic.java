@@ -1,43 +1,46 @@
+package iticbcn.xifratge;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class Polialfabetic {
+public class XifradorPolialfabetic implements Xifrador {
 
     public static final char[] ABECEDARI_MAJUSCULA = "AÀÁÄBCÇDEÈÉËFGHIÌÍÏJKLMNÑOÒÓÖPQRSTUÙÚÜVWXYZ".toCharArray();
-    public static List<char[]> abecedariPermutat = new ArrayList<>();
-    public static Random random;
-    public static final String clauSecreta = "1234";
+    public List<char[]> abecedariPermutat = new ArrayList<>();
+    public Random random;
+    public static final String clauSecreta = "123456";
 
-    public static void main(String[] args) {
-        String msgs[] = {
-            "Test 01 àrbritre, coixí, Perímetre",
-            "Test 02 Taüll, DÍA, año",
-            "Test 03 Peça, Òrrius, Bòvila",};
-        String msgsXifrats[] = new String[msgs.length];
-
-        System.out.println("Xifratge:\n---------");
-        for (int i = 0; i < msgs.length; i++) {
-            initRandom(clauSecreta);
-            msgsXifrats[i] = xifraPoliAlfa(msgs[i]);
-            System.out.printf("%-34s -> %s%n", msgs[i], msgsXifrats[i]);
+    @Override
+    public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
+        try {
+            Long.parseLong(clau);
+        } catch (NumberFormatException e) {
+            throw new ClauNoSuportada("La clau per xifrat Polialfabètic ha de ser un String convertible a long");
         }
-
-        System.out.println("\nDesxifratge:\n---------");
-        for (int i = 0; i < msgs.length; i++) {
-            initRandom(clauSecreta);
-            String msg = desxifraPoliAlfa(msgsXifrats[i]);
-            System.out.printf("%-34s -> %s%n", msgsXifrats[i], msg);
-        }
+        initRandom(clau);
+        String xifrat = xifraPoliAlfa(msg);
+        return new TextXifrat(xifrat.getBytes());
     }
 
-    public static void initRandom(String clauSecreta) {
-        random = new Random(clauSecreta.hashCode());
-        abecedariPermutat.clear();
+    @Override
+    public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
+        try {
+            Long.parseLong(clau);
+        } catch (NumberFormatException e) {
+            throw new ClauNoSuportada("La clau de Polialfabètic ha de ser un String convertible a long");
+        }
+        initRandom(clau);
+        return desxifraPoliAlfa(new String(xifrat.getBytes()));
     }
 
-    public static void permutaAlfabet() {
+    public void initRandom(String clauSecreta) {
+    random = new Random(Long.parseLong(clauSecreta));
+    abecedariPermutat.clear();
+    }
+
+    public void permutaAlfabet() {
         List<Character> llistaCharacters = new ArrayList<>();
         for (char lletra : ABECEDARI_MAJUSCULA) {
             llistaCharacters.add(lletra);
@@ -50,7 +53,7 @@ public class Polialfabetic {
         abecedariPermutat.add(alfabetPermutat);
     }
 
-    public static String xifraPoliAlfa(String msg) {
+    public String xifraPoliAlfa(String msg) {
         StringBuilder xifratString = new StringBuilder();
         for (int i = 0; i < msg.length(); i++) {
             char lletra = msg.charAt(i);
@@ -70,7 +73,7 @@ public class Polialfabetic {
         return xifratString.toString();
     }
 
-    public static String desxifraPoliAlfa(String msgXifrat) {
+    public String desxifraPoliAlfa(String msgXifrat) {
         StringBuilder desxifratString = new StringBuilder();
         for (int i = 0; i < msgXifrat.length(); i++) {
             permutaAlfabet();
